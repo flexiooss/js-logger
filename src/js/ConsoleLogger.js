@@ -84,7 +84,7 @@ export class ConsoleLogger extends LoggerInterface{
       } else {
         log.logs().forEach((v) => {
           if (isString(v)) {
-            console.log('%c ' + v, this._styleLine(log, consoleOptions))
+            console.log('%c ' + v, this._styleLine(log, consoleOptions), true)
           } else {
             console.dir(v, this._styleLine(log, consoleOptions))
           }
