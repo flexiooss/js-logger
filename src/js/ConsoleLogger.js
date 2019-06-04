@@ -17,7 +17,7 @@ export class ConsoleLogger extends LoggerInterface{
 
   /**
    *
-   * @return {LogInterface}
+   * @return {LoggerInterface}
    */
   debug() {
     this._level = Level.DEBUG
@@ -26,7 +26,7 @@ export class ConsoleLogger extends LoggerInterface{
 
   /**
    *
-   * @return {LogInterface}
+   * @return {LoggerInterface}
    */
   info() {
     this._level = Level.INFO
@@ -35,7 +35,7 @@ export class ConsoleLogger extends LoggerInterface{
 
   /**
    *
-   * @return {LogInterface}
+   * @return {LoggerInterface}
    */
   warn() {
     this._level = Level.WARN
@@ -44,7 +44,7 @@ export class ConsoleLogger extends LoggerInterface{
 
   /**
    *
-   * @return {LogInterface}
+   * @return {LoggerInterface}
    */
   error() {
     this._level = Level.ERROR
