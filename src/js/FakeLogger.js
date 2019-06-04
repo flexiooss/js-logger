@@ -1,11 +1,12 @@
 import {FakeLog} from './FakeLog'
+import {LoggerInterface} from './LoggerInterface'
 
 const fakeLog = new FakeLog()
 
 /**
  * @implements {LoggerInterface}
  */
-export class FakeLogger {
+export class FakeLogger extends LoggerInterface{
   /**
    *
    * @return {this}

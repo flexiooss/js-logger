@@ -7,24 +7,28 @@ export class LoggerInterface {
    * @return {this}
    */
   debug() {
+    throw new Error('Not implemented yet')
   }
 
   /**
    * @return {LogInterface}
    */
   info() {
+    throw new Error('Not implemented yet')
   }
 
   /**
    * @return {LogInterface}
    */
   warn() {
+    throw new Error('Not implemented yet')
   }
 
   /**
    * @return {LogInterface}
    */
   error() {
+    throw new Error('Not implemented yet')
   }
   /**
    *
@@ -32,12 +36,14 @@ export class LoggerInterface {
    * @param {Object} options
    */
   log(log, options) {
+    throw new Error('Not implemented yet')
   }
 
   /**
    * @return {LogInterface}
    */
   builder(){
+    throw new Error('Not implemented yet')
 
   }
 }

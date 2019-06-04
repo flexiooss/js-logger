@@ -2,20 +2,22 @@ import {isString, isNumber, assertType, isUndefined} from '@flexio-oss/assert'
 import {COLORS} from './colors'
 import {LogBuilder} from './LogBuilder'
 import {Level} from './Level'
+import {LoggerInterface} from './LoggerInterface'
 
 const FONT_SIZE = 12
 
 /**
  * @implements {LoggerInterface}
  */
-export class ConsoleLogger {
+export class ConsoleLogger extends LoggerInterface{
   constructor() {
+    super()
     this._level = Level.INFO
   }
 
   /**
    *
-   * @return {this}
+   * @return {LogInterface}
    */
   debug() {
     this._level = Level.DEBUG
@@ -24,7 +26,7 @@ export class ConsoleLogger {
 
   /**
    *
-   * @return {this}
+   * @return {LogInterface}
    */
   info() {
     this._level = Level.INFO
@@ -33,7 +35,7 @@ export class ConsoleLogger {
 
   /**
    *
-   * @return {this}
+   * @return {LogInterface}
    */
   warn() {
     this._level = Level.WARN
@@ -42,7 +44,7 @@ export class ConsoleLogger {
 
   /**
    *
-   * @return {this}
+   * @return {LogInterface}
    */
   error() {
     this._level = Level.ERROR
@@ -55,7 +57,7 @@ export class ConsoleLogger {
    * @param {Object} options
    */
   log(log, options) {
-    if (this.isLoggable(log)) {
+    if (this._isLoggable(log)) {
 
       const consoleOptions = ConsoleOptionsBuilder
         .fromObject(options)
@@ -133,8 +135,9 @@ export class ConsoleLogger {
    *
    * @param {LogInterface} log
    * @return {boolean}
+   * @protected
    */
-  isLoggable(log) {
+  _isLoggable(log) {
     if (this._level === Level.DEBUG) {
       return true
     }
