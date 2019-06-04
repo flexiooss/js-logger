@@ -4,28 +4,28 @@
 export class LoggerInterface {
   /**
    *
-   * @return {this}
+   * @return {LoggerInterface}
    */
   debug() {
     throw new Error('Not implemented yet')
   }
 
   /**
-   * @return {LogInterface}
+   * @return {LoggerInterface}
    */
   info() {
     throw new Error('Not implemented yet')
   }
 
   /**
-   * @return {LogInterface}
+   * @return {LoggerInterface}
    */
   warn() {
     throw new Error('Not implemented yet')
   }
 
   /**
-   * @return {LogInterface}
+   * @return {LoggerInterface}
    */
   error() {
     throw new Error('Not implemented yet')

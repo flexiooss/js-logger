@@ -1,4 +1,4 @@
-import {isString, isNumber, assertType, isUndefined} from '@flexio-oss/assert'
+import {isString, isNull,isNumber, assertType, isUndefined} from '@flexio-oss/assert'
 import {COLORS} from './colors'
 import {LogBuilder} from './LogBuilder'
 import {Level} from './Level'
@@ -54,9 +54,9 @@ export class ConsoleLogger extends LoggerInterface{
   /**
    *
    * @param {LogInterface} log
-   * @param {Object} options
+   * @param {Object} [options={}]
    */
-  log(log, options) {
+  log(log, options={}) {
     if (this._isLoggable(log)) {
 
       const consoleOptions = ConsoleOptionsBuilder
@@ -84,7 +84,7 @@ export class ConsoleLogger extends LoggerInterface{
       } else {
         log.logs().forEach((v) => {
           if (isString(v)) {
-            console.log('%c ' + v, this._styleLine(log, consoleOptions), true)
+            console.log('%c ' + v, this._styleLine(log, consoleOptions, true))
           } else {
             console.dir(v, this._styleLine(log, consoleOptions))
           }
@@ -125,7 +125,7 @@ export class ConsoleLogger extends LoggerInterface{
     if (log.level() === Level.WARN) {
       return COLORS.warn
     }
-    if (options.color().startsWith('#')) {
+    if (!isNull(options.color()) && options.color().startsWith('#')) {
       return options.color()
     }
     return COLORS[options.color()] || COLORS.black
@@ -227,10 +227,10 @@ class ConsoleOptionsBuilder {
    */
   static fromObject(options) {
     const builder = new ConsoleOptionsBuilder()
-    if (!isUndefined(options.color)) {
+    if (typeof options.color !== 'undefined') {
       builder.color(options.color)
     }
-    if (!isUndefined(options.titleSize)) {
+    if (typeof options.titleSize !== 'undefined') {
       builder.titleSize(options.titleSize)
     }
 
@@ -242,7 +242,7 @@ class ConsoleOptionsBuilder {
    * @return {ConsoleLogOptions}
    */
   build() {
-    return ConsoleLogOptions(this._color, this._titleSize)
+    return new ConsoleLogOptions(this._color, this._titleSize)
   }
 
 }
