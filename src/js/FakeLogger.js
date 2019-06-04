@@ -9,27 +9,31 @@ const fakeLog = new FakeLog()
 export class FakeLogger extends LoggerInterface{
   /**
    *
-   * @return {this}
+   * @return {LoggerInterface}
    */
   debug() {
+    return this
   }
 
   /**
-   * @return {LogInterface}
+   * @return {LoggerInterface}
    */
   info() {
+    return this
   }
 
   /**
-   * @return {LogInterface}
+   * @return {LoggerInterface}
    */
   warn() {
+    return this
   }
 
   /**
-   * @return {LogInterface}
+   * @return {LoggerInterface}
    */
   error() {
+    return this
   }
 
   /**
