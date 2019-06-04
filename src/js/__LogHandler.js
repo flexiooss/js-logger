@@ -6,8 +6,8 @@ const COLORS = {
   blue: '#15959F',
   sand: '#F1E4B3',
   sandDark: '#EC9770',
-  redDark: '#CC1714',
-  red: '#FF4420',
+  error: '#CC1714',
+  warn: '#FF4420',
   redLight: '#C7402D',
   greenDark: '#00261C',
   green: '#167F39',
@@ -20,6 +20,9 @@ const COLORS = {
   orangeLight: '#FC902D'
 }
 
+/**
+ * @implements {LoggerInterface}
+ */
 class LogHandler {
   constructor(prefix = '', color = 'black') {
     this._prefix = prefix

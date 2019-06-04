@@ -1,0 +1,245 @@
+import {isString, isNumber, assertType, isUndefined} from '@flexio-oss/assert'
+import {COLORS} from './colors'
+import {LogBuilder} from './LogBuilder'
+import {Level} from './Level'
+
+const FONT_SIZE = 12
+
+/**
+ * @implements {LoggerInterface}
+ */
+export class ConsoleLogger {
+  constructor() {
+    this._level = Level.INFO
+  }
+
+  /**
+   *
+   * @return {this}
+   */
+  debug() {
+    this._level = Level.DEBUG
+    return this
+  }
+
+  /**
+   *
+   * @return {this}
+   */
+  info() {
+    this._level = Level.INFO
+    return this
+  }
+
+  /**
+   *
+   * @return {this}
+   */
+  warn() {
+    this._level = Level.WARN
+    return this
+  }
+
+  /**
+   *
+   * @return {this}
+   */
+  error() {
+    this._level = Level.ERROR
+    return this
+  }
+
+  /**
+   *
+   * @param {LogInterface} log
+   * @param {Object} options
+   */
+  log(log, options) {
+    if (this.isLoggable(log)) {
+
+      const consoleOptions = ConsoleOptionsBuilder
+        .fromObject(options)
+        .build()
+
+      if (log.logs().size > 1) {
+        let i = 0
+        let collapsed = false
+        log.logs().forEach((v) => {
+          if (isString(v) && i === 0) {
+            console.groupCollapsed('%c ' + v, this._styleLine(log, consoleOptions, true))
+            collapsed = true
+          } else if (isString(v)) {
+            console.log('%c ' + v, this._styleLine(log, consoleOptions))
+          } else {
+            console.dir(v, this._styleLine(log, consoleOptions))
+          }
+          i++
+        })
+
+        if (collapsed) {
+          console.groupEnd()
+        }
+      } else {
+        log.logs().forEach((v) => {
+          if (isString(v)) {
+            console.log('%c ' + v, this._styleLine(log, consoleOptions))
+          } else {
+            console.dir(v, this._styleLine(log, consoleOptions))
+          }
+        })
+      }
+    }
+  }
+
+  /**
+   *
+   * @param {LogInterface} log
+   * @param {ConsoleLogOptions} options
+   * @param {boolean} [isTitle=false]
+   * @return {string}
+   * @protected
+   */
+  _styleLine(log, options, isTitle = false) {
+    let styles = ''
+    if (isTitle) {
+      styles += 'background-color: ' + this._resolveColor(log, options) + '; color: #fff;' + 'font-size: ' + ((options.titleSize() * 1.5) + FONT_SIZE) + 'px;'
+      return styles
+    }
+    styles += 'color: ' + this._resolveColor(log, options) + ';'
+    return styles
+  }
+
+  /**
+   *
+   * @param {LogInterface} log
+   * @param {ConsoleLogOptions} options
+   * @return {string}
+   * @protected
+   */
+  _resolveColor(log, options) {
+    if (log.level() === Level.ERROR) {
+      return COLORS.error
+    }
+    if (log.level() === Level.WARN) {
+      return COLORS.warn
+    }
+    if (options.color().startsWith('#')) {
+      return options.color()
+    }
+    return COLORS[options.color()] || COLORS.black
+  }
+
+  /**
+   *
+   * @param {LogInterface} log
+   * @return {boolean}
+   */
+  isLoggable(log) {
+    if (this._level === Level.DEBUG) {
+      return true
+    }
+    if (this._level === Level.INFO && log.level() !== Level.DEBUG) {
+      return true
+    }
+    if (this._level === Level.WARN && log.level() !== Level.DEBUG && log.level() !== Level.INFO) {
+      return true
+    }
+    if (this._level === Level.ERROR && log.level() === Level.ERROR) {
+      return true
+    }
+    return false
+  }
+
+  /**
+   *
+   * @return {LogBuilder}
+   */
+  builder() {
+    return new LogBuilder()
+  }
+
+}
+
+class ConsoleLogOptions {
+  /**
+   *
+   * @param {string} color
+   * @param {number} titleSize
+   */
+  constructor(color, titleSize) {
+    this._color = color
+    this._titleSize = titleSize
+  }
+
+  /**
+   *
+   * @return {string}
+   */
+  color() {
+    return this._color
+  }
+
+  /**
+   *
+   * @return {number}
+   */
+  titleSize() {
+
+    return this._titleSize
+  }
+}
+
+class ConsoleOptionsBuilder {
+  constructor() {
+    this._color = null
+    this._titleSize = null
+  }
+
+  /**
+   *
+   * @param {string} color
+   * @return {ConsoleOptionsBuilder}
+   */
+  color(color) {
+    assertType(isString(color), 'ConsoleOptionsBuilder:color: `color` should be a string')
+    this._color = color
+    return this
+  }
+
+  /**
+   *
+   * @param {number} titleSize
+   * @return {ConsoleOptionsBuilder}
+   */
+  titleSize(titleSize) {
+    assertType(isNumber(titleSize), 'ConsoleOptionsBuilder:titleSize: `titleSize` should be a number')
+    this._titleSize = titleSize
+    return this
+  }
+
+  /**
+   *
+   * @param {Object} options
+   * @return {ConsoleOptionsBuilder}
+   */
+  static fromObject(options) {
+    const builder = new ConsoleOptionsBuilder()
+    if (!isUndefined(options.color)) {
+      builder.color(options.color)
+    }
+    if (!isUndefined(options.titleSize)) {
+      builder.titleSize(options.titleSize)
+    }
+
+    return builder
+  }
+
+  /**
+   *
+   * @return {ConsoleLogOptions}
+   */
+  build() {
+    return ConsoleLogOptions(this._color, this._titleSize)
+  }
+
+}
